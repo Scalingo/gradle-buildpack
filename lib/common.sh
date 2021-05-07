@@ -20,7 +20,11 @@ has_stage_task() {
 is_spring_boot() {
   local gradleFile="$(gradle_build_file ${1})"
    test -f ${gradleFile} &&
-     test -n "$(grep "^[^/].*org.springframework.boot:spring-boot" ${gradleFile})" &&
+     (
+       test -n "$(grep "^[^/].*org.springframework.boot:spring-boot" ${gradleFile})" ||
+       test -n "$(grep "^[^/].*spring-boot-gradle-plugin" ${gradleFile})" ||
+       test -n "$(grep "^[^/].*id.*org.springframework.boot" ${gradleFile})"
+     ) &&
      test -z "$(grep "org.grails:grails-" ${gradleFile})"
 }
 
@@ -87,7 +91,8 @@ cache_copy() {
 }
 
 install_jdk() {
-  local install_dir=${1}
+  local install_dir=${1:?}
+  local cache_dir=${2:?}
 
   let start=$(nowms)
   JVM_COMMON_BUILDPACK=${JVM_COMMON_BUILDPACK:-https://buildpacks-repository.s3.eu-central-1.amazonaws.com/jvm-common.tar.xz}
@@ -99,6 +104,6 @@ install_jdk() {
   mtime "jvm-common.install.time" "${start}"
 
   let start=$(nowms)
-  install_java_with_overlay ${install_dir}
+  install_java_with_overlay "${install_dir}" "${cache_dir}"
   mtime "jvm.install.time" "${start}"
 }
