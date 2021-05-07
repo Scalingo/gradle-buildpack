@@ -1,5 +1,4 @@
-Scalingo buildpack: Gradle
-==========================
+# Scalingo buildpack: Gradle
 
 ![](https://cloud.githubusercontent.com/assets/51578/18790734/e1a0bba8-817d-11e6-864e-de501a437ec5.png)
 
