@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-export BUILDPACK_STDLIB_URL="https://lang-common.s3.amazonaws.com/buildpack-stdlib/v7/stdlib.sh"
-
 gradle_build_file() {
   local buildDir=${1}
   if [ -f ${buildDir}/build.gradle.kts ]; then
@@ -26,6 +24,16 @@ is_spring_boot() {
        test -n "$(grep "^[^/].*id.*org.springframework.boot" ${gradleFile})"
      ) &&
      test -z "$(grep "org.grails:grails-" ${gradleFile})"
+}
+
+is_micronaut() {
+  local gradleFile="$(gradle_build_file ${1})"
+  test -f ${gradleFile} && test -n "$(grep "io.micronaut" ${gradleFile})"
+}
+
+is_quarkus() {
+  local gradleFile="$(gradle_build_file ${1})"
+  test -f ${gradleFile} && test -n "$(grep "io.quarkus" ${gradleFile})"
 }
 
 is_ratpack() {
@@ -98,6 +106,7 @@ install_jdk() {
   JVM_COMMON_BUILDPACK=${JVM_COMMON_BUILDPACK:-https://buildpacks-repository.s3.eu-central-1.amazonaws.com/jvm-common.tar.xz}
   mkdir -p /tmp/jvm-common
   curl --retry 3 --silent --location $JVM_COMMON_BUILDPACK | tar --extract --xz --touch -C /tmp/jvm-common --strip-components=1
+
   source /tmp/jvm-common/bin/util
   source /tmp/jvm-common/bin/java
   source /tmp/jvm-common/opt/jdbc.sh

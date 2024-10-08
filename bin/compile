@@ -18,7 +18,7 @@ ENV_DIR=$3
 
 source $LIB_DIR/common.sh
 source $LIB_DIR/failures.sh
-source <(curl --retry 3 -fsSL $BUILDPACK_STDLIB_URL)
+source $LIB_DIR/buildpack-stdlib-v7.sh
 
 export_env $ENV_DIR "." "JAVA_OPTS|JAVA_TOOL_OPTIONS"
 
@@ -39,6 +39,12 @@ elif is_spring_boot $BUILD_DIR; then
     mcount "task.spring"
   fi
   DEFAULT_GRADLE_TASK="build -x ${GRADLE_CHECK_TASK}"
+elif is_micronaut $BUILD_DIR; then
+  echo "-----> Micronaut detected"
+  DEFAULT_GRADLE_TASK="shadowJar -x ${GRADLE_CHECK_TASK}"
+elif is_quarkus $BUILD_DIR; then
+  echo "-----> Quarkus detected"
+  DEFAULT_GRADLE_TASK="build -x ${GRADLE_CHECK_TASK}"
 elif is_ratpack $BUILD_DIR; then
   echo "-----> Ratpack detected"
   mcount "task.ratpack"
@@ -53,7 +59,7 @@ fi
 
 install_jdk "${BUILD_DIR}" "${CACHE_DIR}"
 
-export GRADLE_OPTS=${GRADLE_OPTS-"-Dorg.gradle.daemon=false -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false"}
+export GRADLE_OPTS="${GRADLE_OPTS}${GRADLE_OPTS:+ }-Dorg.gradle.daemon=false -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false"
 
 mkdir -p "$CACHE_DIR/.gradle"
 export GRADLE_USER_HOME=${GRADLE_USER_HOME:-$CACHE_DIR/.gradle}
