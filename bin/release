@@ -13,7 +13,7 @@ if [[ -f "${BUILD_DIR}/Procfile" ]]; then
 	exit 0
 fi
 
-detected_app_framework=$(cat "${BUILD_DIR}/.heroku/gradle_buildpack_detected_app_framework" 2>/dev/null || echo "")
+detected_app_framework=$(cat "${BUILD_DIR}/.scalingo/gradle_buildpack_detected_app_framework" 2>/dev/null || echo "")
 default_web_process=""
 
 case "${detected_app_framework}" in

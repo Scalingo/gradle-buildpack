@@ -37,8 +37,8 @@ output::error <<-EOF
 	Supported Gradle files: $(printf "%s, " "${gradle_files[@]}" | sed 's/, $//')
 
 	IMPORTANT: If your project uses a different build tool:
-	- For Maven projects, use the heroku/java buildpack instead
-	- For sbt projects, use the heroku/scala buildpack instead
+	- For Maven projects, use the java buildpack instead
+	- For sbt projects, use the scala buildpack instead
 
 	Currently the root directory of your app contains:
 
@@ -51,9 +51,6 @@ output::error <<-EOF
 	3. Aren't listed in '.gitignore' or '.slugignore'.
 	4. Have been added to the Git repository using 'git add --all'
 	   and then committed using 'git commit'.
-
-	For help with using Gradle on Heroku, see:
-	https://devcenter.heroku.com/articles/deploying-gradle-apps-on-heroku
 EOF
 
 exit 1

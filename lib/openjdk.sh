@@ -12,7 +12,7 @@ function openjdk::install_openjdk_via_jvm_common_buildpack() {
 
 	# Legacy behaviour for customers and testing code can override the download location of the heroku/jvm buildpack
 	# with JVM_COMMON_BUILDPACK for testing and debugging purposes.
-	local jvm_common_buildpack_tarball_url="${JVM_COMMON_BUILDPACK:-https://buildpack-registry.s3.us-east-1.amazonaws.com/buildpacks/heroku/jvm.tgz}"
+	local jvm_common_buildpack_tarball_url="${JVM_COMMON_BUILDPACK:-"https://buildpacks-repository.s3.eu-central-1.amazonaws.com/jvm-common.tar.xz"}"
 
 	local jvm_common_buildpack_tarball_path
 	jvm_common_buildpack_tarball_path=$(mktemp)
@@ -21,7 +21,7 @@ function openjdk::install_openjdk_via_jvm_common_buildpack() {
 	jvm_common_buildpack_directory=$(mktemp -d)
 
 	curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 5 --location "${jvm_common_buildpack_tarball_url}" -o "${jvm_common_buildpack_tarball_path}"
-	tar -xzm --directory "${jvm_common_buildpack_directory}" --strip-components=1 -f "${jvm_common_buildpack_tarball_path}"
+	tar --extract --xz --touch --directory "${jvm_common_buildpack_directory}" --strip-components=1 -f "${jvm_common_buildpack_tarball_path}"
 
 	# This script translates non-JDBC compliant DATABASE_URL (and similar) environment variables into their
 	# JDBC compatible counterparts and writes them to "JDBC_" prefixed environment variables. We source this script
