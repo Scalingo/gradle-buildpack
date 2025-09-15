@@ -1,7 +1,40 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
 ## [Unreleased]
 
+
+## [v46] - 2025-09-15
+
+### Fixed
+
+- Guard against missing gradlew during daemon cleanup to prevent "No such file or directory" errors. ([#172](https://github.com/heroku/heroku-buildpack-gradle/pull/172))
+
+## [v45] - 2025-09-12
+
+### Fixed
+
+- Fix build failures when users have `org.gradle.vfs.watch=true` in their project gradle.properties by explicitly disabling file system watching in buildpack configuration, as it's incompatible with `org.gradle.projectcachedir`. ([#170](https://github.com/heroku/heroku-buildpack-gradle/pull/170))
+
+## [v44] - 2025-09-12
+
+### Added
+
+- Gradle daemon lifecycle management for faster builds. ([#165](https://github.com/heroku/heroku-buildpack-gradle/pull/165))
+
+### Changed
+
+- Framework detection now uses Gradle dependency resolution instead of build file parsing for more reliable detection across all DSL syntax, version catalogs, and dependency sources. ([#165](https://github.com/heroku/heroku-buildpack-gradle/pull/165))
+- Improved error messages with detailed troubleshooting steps, documentation links, and local reproduction guidance. ([#165](https://github.com/heroku/heroku-buildpack-gradle/pull/165))
+- Improve detection error message with better user experience and guidance for other build tools. ([#168](https://github.com/heroku/heroku-buildpack-gradle/pull/168))
+
+### Removed
+
+- `GRADLE_TESTPACK_LEGACY_TASK` legacy feature - always exclude `check` task during builds instead of just `test` task. ([#165](https://github.com/heroku/heroku-buildpack-gradle/pull/165))
+- Gradle wrapper installation feature. Projects must include their own Gradle wrapper (`gradlew`). To add a wrapper, run `gradle wrapper` locally and commit the generated files. The buildpack's default wrapper provision was deprecated in 2014 (see [#17](https://github.com/heroku/heroku-buildpack-gradle/pull/17)). ([#165](https://github.com/heroku/heroku-buildpack-gradle/pull/165))
 
 ## [v43] - 2025-07-14
 
@@ -82,7 +115,10 @@
 
 * Add symlink from project .gradle to the cache
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-gradle/compare/v43...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-gradle/compare/v46...main
+[v46]: https://github.com/heroku/heroku-buildpack-gradle/compare/v45...v46
+[v45]: https://github.com/heroku/heroku-buildpack-gradle/compare/v44...v45
+[v44]: https://github.com/heroku/heroku-buildpack-gradle/compare/v43...v44
 [v43]: https://github.com/heroku/heroku-buildpack-gradle/compare/v42...v43
 [v42]: https://github.com/heroku/heroku-buildpack-gradle/compare/v41...v42
 [v41]: https://github.com/heroku/heroku-buildpack-gradle/compare/v40...v41
